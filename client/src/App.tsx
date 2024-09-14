@@ -21,10 +21,10 @@ interface Artwork {
 
 const App = () => {
   const [artworks, setArtworks] = useState<Artwork[]>([]);
-  const [totalRecords, setTotalRecords] = useState(0);
+  const [totalRecords,setTotalRecords] = useState(0);
   const [selectedArtworks, setSelectedArtworks] = useState<Artwork[]>([]);
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1); 
+  const [currentPage,setCurrentPage] = useState(1); 
   const [rowCount, setRowCount] = useState<number | null>(null); 
   const overlayPanelRef = useRef<OverlayPanel>(null); 
 
@@ -54,7 +54,8 @@ const App = () => {
   
   useEffect(() => {
     fetchArtworks(currentPage);
-  }, [currentPage]);
+  }, [currentPage]); 
+  
 
   const handleRowSelection = () => {
     if (rowCount && rowCount > 0) {
@@ -68,7 +69,13 @@ const App = () => {
     overlayPanelRef.current?.toggle(event); 
     event.preventDefault();
   };
+  useEffect(() => {
+    console.log("Fetching artworks for page:", setCurrentPage);
+    fetchArtworks(currentPage);
+  }, [currentPage]);
+  
 
+  
   return (
     <div className="App">
       <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1rem' }}>
@@ -86,8 +93,11 @@ const App = () => {
         paginator rows={5} rowsPerPageOptions={[5, 10, 15]} tableStyle={{ minWidth: '30rem' }}
         selectionMode="multiple"
         selection={selectedArtworks}
+        selectionPageOnly
         onSelectionChange={(e) => setSelectedArtworks(e.value)}
         loading={loading}
+        totalRecords={totalRecords}
+        
       >
         <Column
           selectionMode="multiple"
